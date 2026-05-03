@@ -1,61 +1,62 @@
 import { dibujarBarras, generarArrayAleatorio } from "./array.js";
-export let estadoCancelacion = { abortar : false};
+import { bubbleSort } from './algoritmos/bubbleSort.js';
+import { selectionSort } from './algoritmos/selectionSort.js';
+/*import { mergeSort } from './algoritmos/mergeSort.js';
+import { quickSort } from './algoritmos/quickSort.js';*/
+import { resetContadores } from './utilidades.js';
+
+export let estadoCancelacion = { abortar: false };
 let datosActuales = [];
 
-const btnGenerar = document.getElementById("btn-generar");
-const contenedor = document.getElementById('contenedor-barras');
+const btnGenerar    = document.getElementById("btn-generar");
+const btnBubble     = document.getElementById('btn-bubble');
+const btnSelection  = document.getElementById('btn-seleccion');
+const btnMerge      = document.getElementById('btn-merge');
+const btnQuick      = document.getElementById('btn-quick');
+const contenedor    = document.getElementById('contenedor-barras');
 
 btnGenerar.addEventListener("click", () => {
     estadoCancelacion.abortar = true;
     contenedor.innerHTML = "";
     datosActuales = generarArrayAleatorio(20, 300);
-    dibujarBarras(datosActuales);
-    setControlesEstado(false); // Desbloqueamos todo
+    dibujarBarras(datosActuales, {});
+    resetContadores();
+    setControlesEstado(false);
 });
 
-// Función para habilitar/deshabilitar todos los controles a la vez
-function setControlesEstado(estado) {
-    btnBubble.disabled = estado;
-    btnSelection.disabled = estado;
-    
+btnBubble.addEventListener('click', async () => {
+    await correrAlgoritmo(() => bubbleSort(datosActuales));
+});
+
+btnSelection.addEventListener('click', async () => {
+    await correrAlgoritmo(() => selectionSort(datosActuales));
+});
+
+/*btnMerge.addEventListener('click', async () => {
+    await correrAlgoritmo(() => mergeSort(datosActuales));
+});*/
+
+/*btnQuick.addEventListener('click', async () => {
+    await correrAlgoritmo(() => quickSort(datosActuales));
+});*/
+
+// Centraliza la lógica repetida de todos los botones
+async function correrAlgoritmo(fn) {
+    try {
+        setControlesEstado(true);
+        estadoCancelacion.abortar = false;
+        resetContadores();
+        await fn();
+    } catch (error) {
+        console.error("Error en la ejecución:", error);
+    } finally {
+        setControlesEstado(false);
+    }
 }
 
-import { bubbleSort } from './algoritmos/bubbleSort.js';
-
-const btnBubble = document.getElementById('btn-bubble');
-
-btnBubble.addEventListener('click', async() => {
-    try {
-        setControlesEstado(true); // Bloqueamos todo al empezar
-        estadoCancelacion.abortar = false;
-        await selectionSort(datosActuales);
-        
-    } catch (error) {
-        console.error("Error en la ejecución:", error);
-    } finally {
-        // El bloque FINALLY se ejecuta SIEMPRE:
-        // Si el algoritmo termina, si lo abortas o si falla.
-        setControlesEstado(false); 
-    }
-});
-
-
-import { selectionSort } from './algoritmos/selectionSort.js';
-
-const btnSelection = document.getElementById('btn-seleccion');
-
-btnSelection.addEventListener('click', async() => {
-    try {
-        setControlesEstado(true); // Bloqueamos todo al empezar
-        estadoCancelacion.abortar = false; 
-        
-        await selectionSort(datosActuales);
-        
-    } catch (error) {
-        console.error("Error en la ejecución:", error);
-    } finally {
-        // El bloque FINALLY se ejecuta SIEMPRE:
-        // Si el algoritmo termina, si lo abortas o si falla.
-        setControlesEstado(false); 
-    }
-});
+function setControlesEstado(estado) {
+    btnBubble.disabled    = estado;
+    btnSelection.disabled = estado;
+    //btnMerge.disabled     = estado;
+    // btnQuick.disabled     = estado;
+}

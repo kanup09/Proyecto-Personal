@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizador de algoritmos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <div id="contenedor-barras">
@@ -15,10 +15,16 @@
         <button id="btn-generar">Generar Array</button>
         <button id="btn-bubble">Bubble sort</button> 
         <button id="btn-seleccion">Selection sort</button>
+        <button id="btn-merge">Merge Sort</button>
+        <button id="btn-quick">Quick Sort</button>
         <label for="velocidad">Velocidad:</label>
         <input type="range" id="velocidad" min="10" max="500" value="100">
     </div>
-
+    <div id="info">
+        <span id="comparaciones">Comparaciones: 0</span>
+        <span id="swaps">Swaps: 0</span>
+    </div>
+    
 <script type="module" src="JS/main.js"></script>
 </body>
 </html>

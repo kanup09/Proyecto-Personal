@@ -1,35 +1,35 @@
-import { dibujarBarras } from '/JS/array.js';
-import { estadoCancelacion } from '/JS/Main.js';
-
-const ms = document.getElementById('velocidad').value;
-await sleep(ms);
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+import { dibujarBarras } from '../array.js';
+import { estadoCancelacion } from '../main.js';
+import { sleep, actualizarContadores } from '../utilidades.js';
 
 export async function selectionSort(array) {
-    let n= array.length;
-    
-    for(let i=0; i<n-1; i++){
+    let comparaciones = 0;
+    let swaps = 0;
+    const n = array.length;
+
+    for (let i = 0; i < n - 1; i++) {
         let min = i;
-        
-        for(let j=i+1; j<n; j++){
-            if (estadoCancelacion.abortar) {
-                return; // Detiene el algoritmo por completo
-            }
-            dibujarBarras(array, [i, j, min]);
-            await sleep(ms);
-            
-            if(array[j] < array[min]){
+
+        for (let j = i + 1; j < n; j++) {
+            if (estadoCancelacion.abortar) return;
+
+            comparaciones++;
+            actualizarContadores(comparaciones, swaps);
+            dibujarBarras(array, { comparando: [j], pivote: [min], ordenado: [i] });
+            await sleep();
+
+            if (array[j] < array[min]) {
                 min = j;
             }
         }
-        if(min !== i){
+
+        if (min !== i) {
             [array[i], array[min]] = [array[min], array[i]];
-            dibujarBarras(array, [i, min]);
-            await sleep(ms);
+            swaps++;
+            actualizarContadores(comparaciones, swaps);
+            dibujarBarras(array, { comparando: [i, min] });
+            await sleep();
         }
     }
-    dibujarBarras(array, []);
-
+    dibujarBarras(array, {});
 }
