@@ -1,66 +1,65 @@
-export async function mergeSort(array, sleep, dibujarBarras, control, inicio = 0, fin = array.length - 1) {
-    if (inicio >= fin || control.abortar) return;
+import { dibujarBarras } from '../array.js';
+import { estadoCancelacion } from '../main.js';
+import { sleep, actualizarContadores } from '../utilidades.js';
+
+let comparaciones = 0;
+let swaps = 0;
+
+export async function mergeSort(array) {
+    comparaciones = 0;
+    swaps = 0;
+    await mergeSortRecursivo(array, 0, array.length - 1);
+    dibujarBarras(array, {});
+}
+
+async function mergeSortRecursivo(array, inicio, fin) {
+    if (inicio >= fin) return;
+    if (estadoCancelacion.abortar) return;
 
     const medio = Math.floor((inicio + fin) / 2);
 
-    await mergeSort(array, sleep, dibujarBarras, control, inicio, medio);
-    if (control.abortar) return;
-    
-    await mergeSort(array, sleep, dibujarBarras, control, medio + 1, fin);
-    if (control.abortar) return;
-    
-    await merge(array, sleep, dibujarBarras, control, inicio, medio, fin);
+    await mergeSortRecursivo(array, inicio, medio);
+    await mergeSortRecursivo(array, medio + 1, fin);
+    await merge(array, inicio, medio, fin);
 }
 
-async function merge(array, sleep, dibujarBarras, control, inicio, medio, fin) {
-    let n1 = medio - inicio + 1;
-    let n2 = fin - medio;
-
-    // Llenado de arrays auxiliares
-    let L = new Array(n1);
-    let R = new Array(n2);
-    for (let i = 0; i < n1; i++) L[i] = array[inicio + i];
-    for (let j = 0; j < n2; j++) R[j] = array[medio + 1 + j];
+async function merge(array, inicio, medio, fin) {
+    // Copiamos los dos subarrays
+    const izq = array.slice(inicio, medio + 1);
+    const der = array.slice(medio + 1, fin + 1);
 
     let i = 0, j = 0, k = inicio;
 
-    while (i < n1 && j < n2) {
-        if (control.abortar) return;
+    while (i < izq.length && j < der.length) {
+        if (estadoCancelacion.abortar) return;
 
-        // Visualizar qué índices estamos evaluando
-        dibujarBarras(array, { comparando: [inicio + i, medio + 1 + j] });
+        comparaciones++;
+        actualizarContadores(comparaciones, swaps);
+        dibujarBarras(array, { comparando: [k], pivote: [inicio, fin] });
         await sleep();
 
-        if (L[i] <= R[j]) {
-            array[k] = L[i];
+        if (izq[i] <= der[j]) {
+            array[k] = izq[i];
             i++;
         } else {
-            array[k] = R[j];
+            array[k] = der[j];
             j++;
+            swaps++;
         }
-        
-        // Visualizar la sobreescritura en el array principal (usamos el color pivote temporalmente)
-        dibujarBarras(array, { pivote: [k] });
-        await sleep();
+        actualizarContadores(comparaciones, swaps);
         k++;
     }
 
-    // Copiar los elementos restantes (animando también este proceso)
-    while (i < n1) {
-        if (control.abortar) return;
-        array[k] = L[i];
-        dibujarBarras(array, { pivote: [k] });
-        await sleep();
-        i++;
-        k++;
+    // Copiamos lo que sobró
+    while (i < izq.length) {
+        array[k] = izq[i];
+        i++; k++;
+    }
+    while (j < der.length) {
+        array[k] = der[j];
+        j++; k++;
     }
 
-    while (j < n2) {
-        if (control.abortar) return;
-        array[k] = R[j];
-        dibujarBarras(array, { pivote: [k] });
-        await sleep();
-        j++;
-        k++;
-    }
+    dibujarBarras(array, { pivote: [inicio, fin] });
+    await sleep();
 }
