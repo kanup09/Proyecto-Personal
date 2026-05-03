@@ -1,4 +1,3 @@
-
 export function generarArrayAleatorio(cantidad) {
     const contenedor = document.getElementById('contenedor-barras');
     const nuevoArray = [];

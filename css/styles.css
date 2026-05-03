@@ -19,3 +19,8 @@
 .barra.minimo {
     background-color: #3498db; /* Azul: para el mínimo en Selection Sort */
 }
+canvas {
+    border: 1px solid #ccc;
+    display: block;
+    margin: 20px auto;
+}

@@ -1,19 +1,63 @@
 import { dibujarBarras, generarArrayAleatorio } from "./array.js";
+import { resetContadores } from './utilidades.js';
+// Algoritmos
 import { bubbleSort } from './grafo/algoritmos/bubbleSort.js';
-import { selectionSort } from './grafo/algoritmos/selectionSort.js';
 import { mergeSort } from './grafo/algoritmos/mergeSort.js';
 import { quickSort } from './grafo/algoritmos/quickSort.js';
-import { resetContadores } from './utilidades.js';
+import { selectionSort } from './grafo/algoritmos/selectionSort.js';
+import { dfs } from "./grafo/algoritmos/dfs.js";
+import { bfs } from "./grafo/algoritmos/bdf.js";
+// Grafos
+import { Grafo} from "./grafo/grafo.js";
+import { dibujarGrafo} from "./grafo/canvas.js";
+import { inicializarEventos } from "./grafo/canvas.js";
+
 
 export let estadoCancelacion = { abortar: false };
 let datosActuales = [];
 
+// Botones algoritmos
 const btnGenerar    = document.getElementById("btn-generar");
 const btnBubble     = document.getElementById('btn-bubble');
 const btnSelection  = document.getElementById('btn-seleccion');
 const btnMerge      = document.getElementById('btn-merge');
 const btnQuick      = document.getElementById('btn-quick');
 const contenedor    = document.getElementById('contenedor-barras');
+
+// Grafos
+const canvasGrafo = document.getElementById('canvas-grafo');
+const btnBfs = document.getElementById('btn-bfs');
+const btnDfs = document.getElementById('btn-dfs');
+const btnLimpiarGrafo = document.getElementById('btn-limpiar-grafo');
+
+// Estado global del grafo
+const miGrafo = new Grafo();
+
+// Activamos la interacción (clicks y drag)
+if (canvasGrafo) {
+    inicializarEventos(canvasGrafo, miGrafo);
+}
+
+btnBfs?.addEventListener('click', () => ejecutarAlgoritmoGrafo(bfs));
+btnDfs?.addEventListener('click', () => ejecutarAlgoritmoGrafo(dfs));
+
+btnLimpiarGrafo?.addEventListener('click', () => {
+    estadoCancelacion.abortar = true; // Detenemos cualquier algoritmo en curso
+    miGrafo.nodos = [];
+    miGrafo.aristas = [];
+    miGrafo.contadorId = 0;
+    dibujarGrafo(canvasGrafo, miGrafo);
+});
+
+// Función auxiliar para bloquear botones durante la animación
+function toggleBotonesGrafo(bloquear) {
+    const botones = [btnBfs, btnDfs, btnLimpiarGrafo];
+    botones.forEach(btn => {
+        if (btn) btn.disabled = bloquear;
+    });
+}
+
+// Eventos
 
 btnGenerar.addEventListener("click", () => {
     estadoCancelacion.abortar = true;
@@ -51,6 +95,27 @@ async function correrAlgoritmo(fn) {
         console.error("Error en la ejecución:", error);
     } finally {
         setControlesEstado(false);
+    }
+}
+
+async function ejecutarAlgoritmoGrafo(algoritmoFn) {
+    if (miGrafo.nodos.length === 0) {
+        alert("Primero crea algunos nodos haciendo click en el canvas.");
+        return;
+    }
+
+    // Reset de estado y preparación
+    estadoCancelacion.abortar = false;
+    toggleBotonesGrafo(true); // Función para deshabilitar UI
+
+    try {
+        // Por defecto empezamos desde el primer nodo creado
+        const inicioId = miGrafo.nodos[0].id; 
+        await algoritmoFn(canvasGrafo, miGrafo, inicioId);
+    } catch (error) {
+        console.error("Error en el algoritmo de grafo:", error);
+    } finally {
+        toggleBotonesGrafo(false);
     }
 }
 
