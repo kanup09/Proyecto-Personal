@@ -8,10 +8,7 @@ export function generarArrayAleatorio(cantidad, alturaMax) {
     }
     return nuevoArray;
 }
-
-
-
-export async function dibujarBarras(array,indicesResaltados = []){
+/*export async function dibujarBarras(array,indicesResaltados = []){
     const contenedor = document.getElementById("contenedor-barras");
     contenedor.innerHTML = ""; // Esto Borra lo anterior
 
@@ -29,5 +26,34 @@ export async function dibujarBarras(array,indicesResaltados = []){
 
         contenedor.appendChild(barra);
     })
+}*/
+
+export function dibujarBarras(array, indicesResaltados = []) {
+    const contenedor = document.getElementById('contenedor-barras');
+    const barrasExistentes = contenedor.children;
+
+    // Si no hay barras creadas, las creamos por primera vez
+    if (barrasExistentes.length === 0) {
+        array.forEach(() => {
+            const barra = document.createElement('div');
+            barra.classList.add('barra');
+            contenedor.appendChild(barra);
+        });
+    }
+
+    // Ahora solo actualizamos las propiedades de las barras que ya están ahí
+    array.forEach((valor, indice) => {
+        const barra = barrasExistentes[indice];
+        
+        // Actualizamos altura
+        barra.style.height = `${valor}px`; 
+
+        // Actualizamos color según el resaltado
+        if (indicesResaltados.includes(indice)) {
+            barra.style.backgroundColor = "red"; 
+        } else {
+            barra.style.backgroundColor = "royalblue"; 
+        }
+    });
 }
 
