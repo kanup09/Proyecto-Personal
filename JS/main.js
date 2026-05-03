@@ -1,8 +1,8 @@
 import { dibujarBarras, generarArrayAleatorio } from "./array.js";
-import { bubbleSort } from './algoritmos/bubbleSort.js';
-import { selectionSort } from './algoritmos/selectionSort.js';
-import { mergeSort } from './algoritmos/mergeSort.js';
-import { quickSort } from './algoritmos/quickSort.js';
+import { bubbleSort } from './grafo/algoritmos/bubbleSort.js';
+import { selectionSort } from './grafo/algoritmos/selectionSort.js';
+import { mergeSort } from './grafo/algoritmos/mergeSort.js';
+import { quickSort } from './grafo/algoritmos/quickSort.js';
 import { resetContadores } from './utilidades.js';
 
 export let estadoCancelacion = { abortar: false };
@@ -18,7 +18,7 @@ const contenedor    = document.getElementById('contenedor-barras');
 btnGenerar.addEventListener("click", () => {
     estadoCancelacion.abortar = true;
     contenedor.innerHTML = "";
-    datosActuales = generarArrayAleatorio(20, 300);
+    datosActuales = generarArrayAleatorio(20);
     dibujarBarras(datosActuales, {});
     resetContadores();
     setControlesEstado(false);
