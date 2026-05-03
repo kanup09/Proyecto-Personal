@@ -9,7 +9,6 @@
     background-color: royalblue;
     /* Esto elimina el salto brusco y hace que la barra "crezca" o "encoja" suavemente */
     transition: height 0.1s ease-in-out, background-color 0.1s;
-    background-color: var(--bar-color);
 }
 .barra.comparando {
     background-color: #e74c3c; /* Rojo: elementos siendo evaluados */

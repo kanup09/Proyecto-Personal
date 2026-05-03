@@ -1,14 +1,29 @@
 
-export function generarArrayAleatorio(cantidad, alturaMax) {
+export function generarArrayAleatorio(cantidad) {
+    const contenedor = document.getElementById('contenedor-barras');
     const nuevoArray = [];
+    
+    // 1. Limpiar el contenedor por completo para el nuevo set
+    contenedor.innerHTML = "";
+
     for (let i = 0; i < cantidad; i++) {
-        // Genera un número entre 1 y alturaMax
-        const valor = Math.floor(Math.random() * alturaMax) + 1;
+        // 2. Generar el dato numérico
+        const valor = Math.floor(Math.random() * 400) + 20;
         nuevoArray.push(valor);
+
+        // 3. CREAR EL ELEMENTO EN EL DOM
+        const barra = document.createElement('div');
+        barra.classList.add('barra');
+        
+        // Agregamos la barra al contenedor
+        contenedor.appendChild(barra);
     }
+
+    // 4. Ahora que los DIVs existen, los "pintamos"
+    dibujarBarras(nuevoArray);
+    
     return nuevoArray;
 }
-
 export function dibujarBarras(array, opciones = {}) {
     const contenedor = document.getElementById('contenedor-barras');
     const barrasDOM = contenedor.children; // Usamos los elementos existentes para evitar parpadeo
@@ -18,7 +33,7 @@ export function dibujarBarras(array, opciones = {}) {
 
     array.forEach((valor, index) => {
         const barra = barrasDOM[index];
-        
+        if (!barra) return;
         // 1. Actualizamos la altura
         barra.style.height = `${valor}px`; 
         
