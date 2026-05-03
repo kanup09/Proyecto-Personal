@@ -1,8 +1,8 @@
 import { dibujarBarras, generarArrayAleatorio } from "./array.js";
 import { bubbleSort } from './algoritmos/bubbleSort.js';
 import { selectionSort } from './algoritmos/selectionSort.js';
-/*import { mergeSort } from './algoritmos/mergeSort.js';
-import { quickSort } from './algoritmos/quickSort.js';*/
+import { mergeSort } from './algoritmos/mergeSort.js';
+import { quickSort } from './algoritmos/quickSort.js';
 import { resetContadores } from './utilidades.js';
 
 export let estadoCancelacion = { abortar: false };
@@ -32,13 +32,13 @@ btnSelection.addEventListener('click', async () => {
     await correrAlgoritmo(() => selectionSort(datosActuales));
 });
 
-/*btnMerge.addEventListener('click', async () => {
+btnMerge.addEventListener('click', async () => {
     await correrAlgoritmo(() => mergeSort(datosActuales));
-});*/
+});
 
-/*btnQuick.addEventListener('click', async () => {
+btnQuick.addEventListener('click', async () => {
     await correrAlgoritmo(() => quickSort(datosActuales));
-});*/
+});
 
 // Centraliza la lógica repetida de todos los botones
 async function correrAlgoritmo(fn) {
@@ -57,6 +57,6 @@ async function correrAlgoritmo(fn) {
 function setControlesEstado(estado) {
     btnBubble.disabled    = estado;
     btnSelection.disabled = estado;
-    //btnMerge.disabled     = estado;
-    // btnQuick.disabled     = estado;
+    btnMerge.disabled     = estado;
+    btnQuick.disabled     = estado;
 }

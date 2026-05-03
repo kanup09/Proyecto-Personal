@@ -8,51 +8,31 @@ export function generarArrayAleatorio(cantidad, alturaMax) {
     }
     return nuevoArray;
 }
-/*export async function dibujarBarras(array,indicesResaltados = []){
-    const contenedor = document.getElementById("contenedor-barras");
-    contenedor.innerHTML = ""; // Esto Borra lo anterior
 
-    array.forEach((valor, indice) => {
-        const barra = document.createElement("div");
-        barra.classList.add("barra");
-        // Altura proporcional: si el valor es 50, la altura será 50px (o 50%)
-        barra.style.height = `${valor}px`;
-        
-        if (indicesResaltados.includes(indice)) {
-            barra.style.backgroundColor = "red";
-        } else {
-            barra.style.backgroundColor = "royalblue";
-        }
-
-        contenedor.appendChild(barra);
-    })
-}*/
-
-export function dibujarBarras(array, indicesResaltados = []) {
+export function dibujarBarras(array, opciones = {}) {
     const contenedor = document.getElementById('contenedor-barras');
-    const barrasExistentes = contenedor.children;
+    const barrasDOM = contenedor.children; // Usamos los elementos existentes para evitar parpadeo
+    
+    // Desestructuración con valores por defecto
+    const { comparando = [], pivote = [], minimo = [] } = opciones;
 
-    // Si no hay barras creadas, las creamos por primera vez
-    if (barrasExistentes.length === 0) {
-        array.forEach(() => {
-            const barra = document.createElement('div');
-            barra.classList.add('barra');
-            contenedor.appendChild(barra);
-        });
-    }
-
-    // Ahora solo actualizamos las propiedades de las barras que ya están ahí
-    array.forEach((valor, indice) => {
-        const barra = barrasExistentes[indice];
+    array.forEach((valor, index) => {
+        const barra = barrasDOM[index];
         
-        // Actualizamos altura
+        // 1. Actualizamos la altura
         barra.style.height = `${valor}px`; 
+        
+        // 2. Limpiamos todas las clases de estado previas, manteniendo la base
+        barra.className = 'barra'; 
 
-        // Actualizamos color según el resaltado
-        if (indicesResaltados.includes(indice)) {
-            barra.style.backgroundColor = "red"; 
-        } else {
-            barra.style.backgroundColor = "royalblue"; 
+        // 3. Asignamos la nueva clase de color según el estado actual
+        // El orden del if/else define la prioridad visual si un índice coincide en varios arrays
+        if (pivote.includes(index)) {
+            barra.classList.add('pivote');
+        } else if (minimo.includes(index)) {
+            barra.classList.add('minimo');
+        } else if (comparando.includes(index)) {
+            barra.classList.add('comparando');
         }
     });
 }
