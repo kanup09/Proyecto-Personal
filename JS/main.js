@@ -1,13 +1,13 @@
 import { dibujarBarras, generarArrayAleatorio } from "./array.js";
 import { resetContadores } from './utilidades.js';
 // Algoritmos
-import { bubbleSort } from './grafo/algoritmos/bubbleSort.js';
-import { mergeSort } from './grafo/algoritmos/mergeSort.js';
-import { quickSort } from './grafo/algoritmos/quickSort.js';
-import { selectionSort } from './grafo/algoritmos/selectionSort.js';
+import { bubbleSort } from './algoritmos/bubbleSort.js';
+import { mergeSort } from './algoritmos/mergeSort.js';
+import { quickSort } from './algoritmos/quickSort.js';
+import { selectionSort } from './algoritmos/selectionSort.js';
+// Grafos
 import { dfs } from "./grafo/algoritmos/dfs.js";
 import { bfs } from "./grafo/algoritmos/bdf.js";
-// Grafos
 import { Grafo} from "./grafo/grafo.js";
 import { dibujarGrafo} from "./grafo/canvas.js";
 import { inicializarEventos } from "./grafo/canvas.js";

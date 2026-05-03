@@ -1,4 +1,4 @@
-import { dibujarBarras } from '../../array.js';
+import { dibujarBarras } from '../array.js';
 import { estadoCancelacion } from '../main.js';
 import { sleep, actualizarContadores } from '../utilidades.js';
 

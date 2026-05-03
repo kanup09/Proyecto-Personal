@@ -1,6 +1,6 @@
-import { dibujarBarras } from '../../array.js';
-import { estadoCancelacion } from '../../main.js';
-import { sleep, actualizarContadores } from '../../utilidades.js';
+import { dibujarBarras } from '../array.js';
+import { estadoCancelacion } from '../main.js';
+import { sleep, actualizarContadores } from '../utilidades.js';
 
 let comparaciones = 0;
 let swaps = 0;

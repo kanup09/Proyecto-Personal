@@ -1,6 +1,6 @@
-import { dibujarBarras } from '../../array.js';
-import { estadoCancelacion } from '../../main.js';
-import { sleep, actualizarContadores } from '../../utilidades.js';
+import { dibujarBarras } from '../array.js';
+import { estadoCancelacion } from '../main.js';
+import { sleep, actualizarContadores } from '../utilidades.js';
 
 export async function selectionSort(array) {
     let comparaciones = 0;
