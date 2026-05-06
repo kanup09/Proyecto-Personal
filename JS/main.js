@@ -9,9 +9,7 @@ import { selectionSort } from './algoritmos/selectionSort.js';
 import { dfs } from "./grafo/algoritmos/dfs.js";
 import { bfs } from "./grafo/algoritmos/bdf.js";
 import { Grafo} from "./grafo/grafo.js";
-import { dibujarGrafo} from "./grafo/canvas.js";
-import { inicializarEventos } from "./grafo/canvas.js";
-
+import { dibujarGrafo, inicializarEventos } from "./grafo/canvas.js";
 import { dijkstra } from "./grafo/algoritmos/dijkstra.js";
 
 export let estadoCancelacion = { abortar: false };
