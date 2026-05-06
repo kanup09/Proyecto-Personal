@@ -33,28 +33,6 @@ y recorrido de grafos. Construida con JavaScript vanilla, HTML y CSS — sin fra
 - CSS3
 - Sin dependencias externas
 
-## 📁 Estructura del proyecto
-visualizador-algoritmos/
-├── index.html
-├── css/
-│   └── styles.css
-└── JS/
-├── main.js
-├── array.js
-├── utilidades.js
-├── algoritmos/
-│   ├── bubbleSort.js
-│   ├── selectionSort.js
-│   ├── mergeSort.js
-│   └── quickSort.js
-└── grafo/
-├── grafo.js
-├── canvas.js
-└── algoritmos/
-├── bfs.js
-├── dfs.js
-└── dijkstra.js
-
 ## ▶️ Cómo correrlo localmente
 
 ```bash
