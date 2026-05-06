@@ -54,3 +54,30 @@ visualizador-algoritmos/
 ├── bfs.js
 ├── dfs.js
 └── dijkstra.js
+
+## ▶️ Cómo correrlo localmente
+
+```bash
+git clone https://github.com/kanup09/Proyecto-Personal.git
+cd Proyecto-Personal
+```
+
+Abrí `index.html` con un servidor local. Si tenés VS Code, usá la extensión 
+**Live Server** (click derecho → "Open with Live Server").
+
+> ⚠️ No funciona abriendo el archivo directamente en el navegador porque 
+> los módulos ES6 requieren un servidor HTTP.
+
+## 📚 Lo que aprendí
+
+- Animaciones con `async/await` y control del event loop en JavaScript
+- Manipulación del DOM y Canvas API sin librerías externas
+- Implementación de algoritmos clásicos desde cero
+- Arquitectura modular con ES6 modules
+- Cancelación de tareas asíncronas con flags de estado compartido
+
+## 🗺️ Próximos pasos
+
+- [ ] Soporte para grafos dirigidos
+- [ ] Migración a TypeScript
+- [ ] Más algoritmos: Heap Sort, A*
