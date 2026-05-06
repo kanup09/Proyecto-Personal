@@ -12,6 +12,7 @@ import { Grafo} from "./grafo/grafo.js";
 import { dibujarGrafo} from "./grafo/canvas.js";
 import { inicializarEventos } from "./grafo/canvas.js";
 
+import { dijkstra } from "./grafo/algoritmos/dijkstra.js";
 
 export let estadoCancelacion = { abortar: false };
 let datosActuales = [];
@@ -29,7 +30,7 @@ const canvasGrafo = document.getElementById('canvas-grafo');
 const btnBfs = document.getElementById('btn-bfs');
 const btnDfs = document.getElementById('btn-dfs');
 const btnLimpiarGrafo = document.getElementById('btn-limpiar-grafo');
-
+const btnDijkstra = document.getElementById('btn-dijkstra');
 // Estado global del grafo
 const miGrafo = new Grafo();
 
@@ -40,6 +41,7 @@ if (canvasGrafo) {
 
 btnBfs?.addEventListener('click', () => ejecutarAlgoritmoGrafo(bfs));
 btnDfs?.addEventListener('click', () => ejecutarAlgoritmoGrafo(dfs));
+btnDijkstra?.addEventListener('click', () => ejecutarAlgoritmoGrafo(dijkstra));
 
 btnLimpiarGrafo?.addEventListener('click', () => {
     estadoCancelacion.abortar = true; // Detenemos cualquier algoritmo en curso
@@ -51,8 +53,7 @@ btnLimpiarGrafo?.addEventListener('click', () => {
 
 // Función auxiliar para bloquear botones durante la animación
 function toggleBotonesGrafo(bloquear) {
-    const botones = [btnBfs, btnDfs, btnLimpiarGrafo];
-    botones.forEach(btn => {
+    [btnBfs, btnDfs, btnDijkstra, btnLimpiarGrafo].forEach(btn => {
         if (btn) btn.disabled = bloquear;
     });
 }
@@ -118,6 +119,7 @@ async function ejecutarAlgoritmoGrafo(algoritmoFn) {
         toggleBotonesGrafo(false);
     }
 }
+
 
 function setControlesEstado(estado) {
     btnBubble.disabled    = estado;

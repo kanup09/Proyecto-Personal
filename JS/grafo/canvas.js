@@ -13,11 +13,9 @@ export function inicializarEventos(canvas, grafo) {
         const nodo = nodoEnPosicion(grafo, x, y);
 
         if (nodo) {
-            // Si clickeamos un nodo, empezamos a crear una arista
             nodoSeleccionado = nodo;
             modoArista = true;
         } else {
-            // Si clickeamos vacío, creamos un nuevo nodo
             grafo.agregarNodo(x, y);
             dibujarGrafo(canvas, grafo);
         }
@@ -28,8 +26,6 @@ export function inicializarEventos(canvas, grafo) {
             const rect = canvas.getBoundingClientRect();
             mousePos.x = e.clientX - rect.left;
             mousePos.y = e.clientY - rect.top;
-            
-            // Redibujamos para mostrar la línea elástica
             dibujarGrafo(canvas, grafo);
             dibujarLineaTemporal(canvas, nodoSeleccionado, mousePos);
         }
@@ -43,9 +39,16 @@ export function inicializarEventos(canvas, grafo) {
 
             const nodoDestino = nodoEnPosicion(grafo, x, y);
 
-            // Si soltamos sobre otro nodo (y no es el mismo), creamos arista
             if (nodoDestino && nodoDestino.id !== nodoSeleccionado.id) {
-                grafo.agregarArista(nodoSeleccionado.id, nodoDestino.id);
+                // AGREGADO: Prompt para el peso de la arista
+                const entrada = prompt("Ingresá el peso de la conexión:", "1");
+                const peso = parseInt(entrada);
+                
+                if (!isNaN(peso) && peso > 0) {
+                    grafo.agregarArista(nodoSeleccionado.id, nodoDestino.id, peso);
+                } else if (entrada !== null) {
+                    alert("Por favor, ingresá un número válido mayor a 0.");
+                }
             }
 
             modoArista = false;
@@ -70,12 +73,12 @@ export function dibujarGrafo(canvas, grafo, estado = {}) {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const { visitados = [], enCola = [], actual = null, camino = [] } = estado;
+    const { visitados = [], enCola = [], actual = null, camino = [], distancias = null } = estado;
 
-    // 1. Dibujar aristas primero (quedan detrás de los nodos)
+    // 1. Dibujar aristas
     for (const arista of grafo.aristas) {
         const desde = grafo.nodos.find(n => n.id === arista.desde);
-        const hasta  = grafo.nodos.find(n => n.id === arista.hasta);
+        const hasta = grafo.nodos.find(n => n.id === arista.hasta);
         if (!desde || !hasta) continue;
 
         const enCamino = camino.includes(arista.desde) && camino.includes(arista.hasta);
@@ -87,28 +90,28 @@ export function dibujarGrafo(canvas, grafo, estado = {}) {
         ctx.lineWidth = enCamino ? 3 : 1.5;
         ctx.stroke();
 
-        // Dibujar peso en el medio de la arista
+        // Peso de la arista
         const mx = (desde.x + hasta.x) / 2;
         const my = (desde.y + hasta.y) / 2;
-        ctx.fillStyle = '#cbd5e1';
-        ctx.font = '12px monospace';
+        ctx.fillStyle = '#10b981'
+        ctx.font = 'bold 13px monospace'
         ctx.fillText(arista.peso, mx, my);
     }
 
-    // 2. Dibujar nodos encima
+    // 2. Dibujar nodos
     for (const nodo of grafo.nodos) {
         ctx.beginPath();
         ctx.arc(nodo.x, nodo.y, 20, 0, Math.PI * 2);
 
-        // Color según estado del algoritmo
+        // Lógica de colores
         if (nodo.id === actual) {
-            ctx.fillStyle = '#f59e0b';       // amarillo = procesando ahora
+            ctx.fillStyle = '#f59e0b'; // amarillo
         } else if (visitados.includes(nodo.id)) {
-            ctx.fillStyle = '#22c55e';       // verde = visitado
+            ctx.fillStyle = '#22c55e'; // verde
         } else if (enCola.includes(nodo.id)) {
-            ctx.fillStyle = '#3b82f6';       // azul = en cola
+            ctx.fillStyle = '#3b82f6'; // azul
         } else {
-            ctx.fillStyle = '#1e293b';       // gris oscuro = sin visitar
+            ctx.fillStyle = '#1e293b'; // gris
         }
 
         ctx.fill();
@@ -116,12 +119,20 @@ export function dibujarGrafo(canvas, grafo, estado = {}) {
         ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Label del nodo
+        // ID/Label del nodo
         ctx.fillStyle = '#f8fafc';
         ctx.font = 'bold 14px monospace';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(nodo.label, nodo.x, nodo.y);
+
+        // CORREGIDO: Mostrar distancia debajo del nodo (ahora dentro del bucle)
+        if (distancias && distancias[nodo.id] !== undefined) {
+            const dist = distancias[nodo.id] === Infinity ? '∞' : distancias[nodo.id];
+            ctx.fillStyle = '#f59e0b';
+            ctx.font = 'bold 12px monospace';
+            ctx.fillText(`d:${dist}`, nodo.x, nodo.y + 35);
+        }
     }
 }
 
